@@ -38,10 +38,25 @@ router.get('/sprints', requireToken, (req, res, next) => {
 })
 
 // show
-
+router.get('/sprints/:id', requireToken, (req, res, next) => {
+	Sprint.findById(req.params.id)
+		.then(handle404)
+		.then(sprint => res.status(200).json({ sprint: sprint.toObject() }))
+		.catch(next)
+}) 
 
 // Update
-
+router.patch('/sprints/:id', requireToken, (req, res, next) => {
+	delete req.body.sprint.owner
+	Sprint.findById(req.params.id)
+		.then(handle404)
+		.then(sprint => {
+			requireOwnership(req, sprint)
+			return sprint.updateOne(req.body.sprint)
+		})
+		.then(() => res.sendStatus(204))
+		.catch(next)
+})
 
 // Create
 router.post('/sprints', requireToken, (req, res, next) => {
@@ -52,6 +67,15 @@ router.post('/sprints', requireToken, (req, res, next) => {
 })
 
 // Destroy
-
+router.delete('/sprints/:id', requireToken, (req, res, next) => {
+	Sprint.findById(req.params.id)
+		.then(handle404)
+		.then(sprint => {
+			requireOwnership(req, sprint)
+			sprint.deleteOne()
+		})
+		.then(() => res.sendStatus(204))
+		.catch(next)
+})
 
 module.exports = router
