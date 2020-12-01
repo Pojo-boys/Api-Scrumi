@@ -30,9 +30,10 @@ const router = express.Router()
 // index route
 router.get('/tasks', requireToken, (req, res, next) => {
 	Task.find({ owner: req.user.id })
+		.populate('sprint')
 		.then(tasks => {
 			return tasks.map(task => task.toObject())
-	
+
 		})
 		.then(tasks => res.status(200).json({ tasks }))
 		.catch(next)
@@ -41,6 +42,7 @@ router.get('/tasks', requireToken, (req, res, next) => {
 // show route
 router.get('/tasks/:id', requireToken, (req, res, next) => {
 	Task.findById(req.params.id)
+		.populate('sprint')
 		.then(handle404)
 		.then(task => res.status(200).json({ task: task.toObject() }))
 		.catch(next)
