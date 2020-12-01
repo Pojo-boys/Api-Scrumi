@@ -1,7 +1,7 @@
 #!/bin/bash
 
 API="http://localhost:4741"
-URL_PATH="/sprint"
+URL_PATH="/sprints"
 
 curl "${API}${URL_PATH}" \
   --include \
@@ -11,8 +11,7 @@ curl "${API}${URL_PATH}" \
   --data '{
     "sprint": {
       "name": "'"${NAME}"'",
-      "timeframe": "'"${TIMEFRAME}"'",
-      "objectives": "'"${OBJECTIVES}"'"
+      "timeframe": "'"${TIMEFRAME}"'"
     }
   }'
 

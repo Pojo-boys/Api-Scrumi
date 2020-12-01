@@ -1,7 +1,7 @@
 #!/bin/sh
 
 API="http://localhost:4741"
-URL_PATH="/sprint"
+URL_PATH="/sprints"
 
 curl "${API}${URL_PATH}/${ID}" \
   --include \

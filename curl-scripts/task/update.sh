@@ -11,7 +11,8 @@ curl "${API}${URL_PATH}/${ID}" \
 --data '{
     "task": {
       "title": "'"${TITLE}"'",
-      "description": "'"${DESCRIPTION}"'"
+      "description": "'"${DESCRIPTION}"'",
+      "sprint": "'"${SPRINT}"'"
     }
   }'
 
