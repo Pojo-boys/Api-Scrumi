@@ -28,8 +28,30 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 // Index
+router.get('/sprints', requireToken, (req, res, next) => {
+	Sprint.find({ owner: req.user.id })
+		.then(sprints => {
+			return sprints.map(sprint => sprint.toObject())
+		})
+		.then(sprints => res.status(200).json({ sprints }))
+		.catch(next)
+})
+
+// show
+
+
 // Update
+
+
 // Create
+router.post('/sprints', requireToken, (req, res, next) => {
+	req.body.sprint.owner = req.user.id
+	Sprint.create(req.body.sprint)
+		.then(sprint => res.status(201).json({ sprint }))
+		.catch(next)
+})
+
 // Destroy
+
 
 module.exports = router
