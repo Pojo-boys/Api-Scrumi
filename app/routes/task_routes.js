@@ -29,55 +29,54 @@ const router = express.Router()
 
 // index route
 router.get('/tasks', requireToken, (req, res, next) => {
-	Task.find({ owner: req.user.id })
-		.populate('sprint')
-		.then(tasks => {
-			return tasks.map(task => task.toObject())
-
-		})
-		.then(tasks => res.status(200).json({ tasks }))
-		.catch(next)
+  Task.find({ owner: req.user.id })
+    .populate('sprint')
+    .then(tasks => {
+      return tasks.map(task => task.toObject())
+    })
+    .then(tasks => res.status(200).json({ tasks }))
+    .catch(next)
 })
 
 // show route
 router.get('/tasks/:id', requireToken, (req, res, next) => {
-	Task.findById(req.params.id)
-		.populate('sprint')
-		.then(handle404)
-		.then(task => res.status(200).json({ task: task.toObject() }))
-		.catch(next)
+  Task.findById(req.params.id)
+    .populate('sprint')
+    .then(handle404)
+    .then(task => res.status(200).json({ task: task.toObject() }))
+    .catch(next)
 })
 
 // create route
 router.post('/tasks', requireToken, (req, res, next) => {
-	req.body.task.owner = req.user.id
-	Task.create(req.body.task)
-		.then(task => res.status(201).json({ task }))
-		.catch(next)
+  req.body.task.owner = req.user.id
+  Task.create(req.body.task)
+    .then(task => res.status(201).json({ task }))
+    .catch(next)
 })
 // update route
 router.patch('/tasks/:id', requireToken, (req, res, next) => {
-	delete req.body.task.owner
-	Task.findById(req.params.id)
-		.then(handle404)
-		.then(task => {
-			requireOwnership(req, task)
-			return task.updateOne(req.body.task)
-		})
-		.then(() => res.sendStatus(204))
-		.catch(next)
+  delete req.body.task.owner
+  Task.findById(req.params.id)
+    .then(handle404)
+    .then(task => {
+      requireOwnership(req, task)
+      return task.updateOne(req.body.task)
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 // destroy route
 router.delete('/tasks/:id', requireToken, (req, res, next) => {
-	Task.findById(req.params.id)
-		.then(handle404)
-		.then(task => {
-			requireOwnership(req, task)
-			task.deleteOne()
-		})
-		.then(() => res.sendStatus(204))
-		.catch(next)
+  Task.findById(req.params.id)
+    .then(handle404)
+    .then(task => {
+      requireOwnership(req, task)
+      task.deleteOne()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 module.exports = router

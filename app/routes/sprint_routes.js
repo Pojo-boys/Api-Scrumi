@@ -29,53 +29,53 @@ const router = express.Router()
 
 // Index
 router.get('/sprints', requireToken, (req, res, next) => {
-	Sprint.find({ owner: req.user.id })
-		.then(sprints => {
-			return sprints.map(sprint => sprint.toObject())
-		})
-		.then(sprints => res.status(200).json({ sprints }))
-		.catch(next)
+  Sprint.find({ owner: req.user.id })
+    .then(sprints => {
+      return sprints.map(sprint => sprint.toObject())
+    })
+    .then(sprints => res.status(200).json({ sprints }))
+    .catch(next)
 })
 
 // show
 router.get('/sprints/:id', requireToken, (req, res, next) => {
-	Sprint.findById(req.params.id)
-		.then(handle404)
-		.then(sprint => res.status(200).json({ sprint: sprint.toObject() }))
-		.catch(next)
-}) 
+  Sprint.findById(req.params.id)
+    .then(handle404)
+    .then(sprint => res.status(200).json({ sprint: sprint.toObject() }))
+    .catch(next)
+})
 
 // Update
 router.patch('/sprints/:id', requireToken, (req, res, next) => {
-	delete req.body.sprint.owner
-	Sprint.findById(req.params.id)
-		.then(handle404)
-		.then(sprint => {
-			requireOwnership(req, sprint)
-			return sprint.updateOne(req.body.sprint)
-		})
-		.then(() => res.sendStatus(204))
-		.catch(next)
+  delete req.body.sprint.owner
+  Sprint.findById(req.params.id)
+    .then(handle404)
+    .then(sprint => {
+      requireOwnership(req, sprint)
+      return sprint.updateOne(req.body.sprint)
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 // Create
 router.post('/sprints', requireToken, (req, res, next) => {
-	req.body.sprint.owner = req.user.id
-	Sprint.create(req.body.sprint)
-		.then(sprint => res.status(201).json({ sprint }))
-		.catch(next)
+  req.body.sprint.owner = req.user.id
+  Sprint.create(req.body.sprint)
+    .then(sprint => res.status(201).json({ sprint }))
+    .catch(next)
 })
 
 // Destroy
 router.delete('/sprints/:id', requireToken, (req, res, next) => {
-	Sprint.findById(req.params.id)
-		.then(handle404)
-		.then(sprint => {
-			requireOwnership(req, sprint)
-			sprint.deleteOne()
-		})
-		.then(() => res.sendStatus(204))
-		.catch(next)
+  Sprint.findById(req.params.id)
+    .then(handle404)
+    .then(sprint => {
+      requireOwnership(req, sprint)
+      sprint.deleteOne()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 module.exports = router
