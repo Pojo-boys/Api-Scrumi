@@ -4,7 +4,7 @@ const express = require('express')
 const passport = require('passport')
 
 // pull in Mongoose model for examples
-const Task = require('../models/task')
+const Sprint = require('../models/sprint')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -27,53 +27,52 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// index route
-router.get('/tasks', requireToken, (req, res, next) => {
-  Task.find({ owner: req.user.id })
-    .populate('sprint')
-    .then(tasks => {
-      return tasks.map(task => task.toObject())
+// Index
+router.get('/sprints', requireToken, (req, res, next) => {
+  Sprint.find({ owner: req.user.id })
+    .then(sprints => {
+      return sprints.map(sprint => sprint.toObject())
     })
-    .then(tasks => res.status(200).json({ tasks }))
+    .then(sprints => res.status(200).json({ sprints }))
     .catch(next)
 })
 
-// show route
-router.get('/tasks/:id', requireToken, (req, res, next) => {
-  Task.findById(req.params.id)
-    .populate('sprint')
+// show
+router.get('/sprints/:id', requireToken, (req, res, next) => {
+  Sprint.findById(req.params.id)
     .then(handle404)
-    .then(task => res.status(200).json({ task: task.toObject() }))
+    .then(sprint => res.status(200).json({ sprint: sprint.toObject() }))
     .catch(next)
 })
 
-// create route
-router.post('/tasks', requireToken, (req, res, next) => {
-  req.body.task.owner = req.user.id
-  Task.create(req.body.task)
-    .then(task => res.status(201).json({ task }))
-    .catch(next)
-})
-// update route
-router.patch('/tasks/:id', requireToken, (req, res, next) => {
-  delete req.body.task.owner
-  Task.findById(req.params.id)
+// Update
+router.patch('/sprints/:id', requireToken, (req, res, next) => {
+  delete req.body.sprint.owner
+  Sprint.findById(req.params.id)
     .then(handle404)
-    .then(task => {
-      requireOwnership(req, task)
-      return task.updateOne(req.body.task)
+    .then(sprint => {
+      requireOwnership(req, sprint)
+      return sprint.updateOne(req.body.sprint)
     })
     .then(() => res.sendStatus(204))
     .catch(next)
 })
 
-// destroy route
-router.delete('/tasks/:id', requireToken, (req, res, next) => {
-  Task.findById(req.params.id)
+// Create
+router.post('/sprints', requireToken, (req, res, next) => {
+  req.body.sprint.owner = req.user.id
+  Sprint.create(req.body.sprint)
+    .then(sprint => res.status(201).json({ sprint }))
+    .catch(next)
+})
+
+// Destroy
+router.delete('/sprints/:id', requireToken, (req, res, next) => {
+  Sprint.findById(req.params.id)
     .then(handle404)
-    .then(task => {
-      requireOwnership(req, task)
-      task.deleteOne()
+    .then(sprint => {
+      requireOwnership(req, sprint)
+      sprint.deleteOne()
     })
     .then(() => res.sendStatus(204))
     .catch(next)

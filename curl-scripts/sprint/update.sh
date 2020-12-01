@@ -1,7 +1,7 @@
 #!/bin/bash
 
 API="http://localhost:4741"
-URL_PATH="/tasks"
+URL_PATH="/sprints"
 
 curl "${API}${URL_PATH}/${ID}" \
   --include \
@@ -9,10 +9,9 @@ curl "${API}${URL_PATH}/${ID}" \
   --header "Content-Type: application/json" \
 --header "Authorization: Bearer ${TOKEN}" \
 --data '{
-    "task": {
-      "title": "'"${TITLE}"'",
-      "description": "'"${DESCRIPTION}"'",
-      "sprint": "'"${SPRINT}"'"
+    "sprint": {
+      "name": "'"${NAME}"'",
+      "timeframe": "'"${TIMEFRAME}"'"
     }
   }'
 
