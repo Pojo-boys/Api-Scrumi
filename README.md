@@ -1,8 +1,13 @@
 # Backend Scrumi
 
+## Planning story
+
+Development of Scrumi started off as a baseline idea for a bucket list app. After much deliberation, we all decided that taking the route of something relevant to what we were studying and also useful for ourselves. We decided that Scrumi should be an application that would allow teams to follow the scrum process to achieve an agile methodology.
+During the development and planning process we used techniques such as paired programing and mob programing to ensure consistency throughout the project and participation of every member. Mob programming is where we spent the majority of our time, making sure there were a few typos as possible. Whenever an issue arised we would gather our thoughts to come up with the most effective solution.
+
 ## Description
 
-Scrumi is an application to help developers with their scrum tasks. Create a task, add that task to a sprint, and track your progress as you complete sections of your current project.
+Scrumi is an application to help developers with their scrum tasks. Create a task, add that task to a sprint, and track your progress as you complete sections of your current project. This repository contains the backend code which created the express api and the structure for our database.
 
 ## Important Links
 
@@ -18,6 +23,7 @@ Scrumi is an application to help developers with their scrum tasks. Create a tas
 - MongoDB
 - Git
 - GitHub
+- Node
 
 ## Unsolved Problems
 
